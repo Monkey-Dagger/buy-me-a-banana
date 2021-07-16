@@ -137,7 +137,23 @@ function App() {
 
   const loadWeb3Modal = useCallback(async () => {
     const provider = await web3Modal.connect();
-    setInjectedProvider(new Web3Provider(provider));
+    setInjectedProvider(new StaticJsonRpcProvider(provider));
+
+    provider.on('chainChanged', (chainId) => {
+      console.log(`chain changed to ${chainId}! updating providers`);
+      setInjectedProvider(new StaticJsonRpcProvider(provider));
+    });
+
+    provider.on('accountsChanged', () => {
+      console.log('account changed!');
+      setInjectedProvider(new StaticJsonRpcProvider(provider));
+    });
+
+    // Subscribe to session disconnection
+    provider.on('disconnect', (code, reason) => {
+      console.log(code, reason);
+      logoutOfWeb3Modal();
+    });
   }, [setInjectedProvider]);
 
   useEffect(() => {
