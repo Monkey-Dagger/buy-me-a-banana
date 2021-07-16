@@ -96,10 +96,13 @@ function App() {
   ]);
 
   let networkDisplay = '';
-  if (selectedChainId === 80001) {
+  if (localChainId && selectedChainId && localChainId !== selectedChainId) {
+    const networkSelected = NETWORK(selectedChainId);
+    const networkLocal = NETWORK(localChainId);
+
     networkDisplay = (
       <div style={{
-        zIndex: 2, position: 'absolute', right: 10, top: 100, padding: 16, maxWidth: '400px',
+        zIndex: 2, position: 'absolute', right: 0, top: 60, padding: 16,
       }}
       >
         <Alert
@@ -108,20 +111,20 @@ function App() {
             <div>
               You have
               {' '}
+              <b>{networkSelected && networkSelected.name}</b>
               {' '}
-              selected wrong network and you need to be on
+              selected and you need to be on
               {' '}
-              <b>Polygon Mumbai testnet 80001</b>
+              <b>{networkLocal && networkLocal.name}</b>
               .
             </div>
-          )}
+            )}
           type="error"
           closable={false}
         />
       </div>
     );
   } else {
-    console.log('i am in ', selectedChainId);
     networkDisplay = (
       <div style={{
         zIndex: 2, position: 'absolute', right: 154, top: 28, padding: 16, color: targetNetwork.color,
