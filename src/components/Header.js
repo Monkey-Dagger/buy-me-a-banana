@@ -17,6 +17,11 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     fontFamily: 'Chewy',
+    color: 'white',
+    marginLeft: '5px',
+  },
+  title1: {
+    fontFamily: 'Chewy',
     color: 'rgba(249, 211, 180, 1)',
     marginLeft: '5px',
   },
@@ -99,7 +104,10 @@ export default function Header({
             width={60}
           />
           <Typography variant="h6" className={classes.title}>
-            Buy me a banana
+            Buy me a
+          </Typography>
+          <Typography variant="h6" className={classes.title1}>
+            banana
           </Typography>
           <div className={classes.empty} />
           {modalButtons}

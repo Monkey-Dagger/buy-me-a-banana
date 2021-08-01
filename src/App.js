@@ -3,11 +3,17 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 
 import { StaticJsonRpcProvider, Web3Provider } from '@ethersproject/providers';
 import { Alert } from 'antd';
+import {
+  BrowserRouter, Route, Switch, Link,
+} from 'react-router-dom';
 import Web3Modal from 'web3modal';
+import Portis from '@portis/web3';
 import './App.css';
 import WebFont from 'webfontloader';
-import { Header } from './components';
-import { INFURA_ID, NETWORK, NETWORKS } from './constants';
+import { Header, Create, Profile } from './components';
+import {
+  INFURA_ID, PORTIS_ID, NETWORK, NETWORKS,
+} from './constants';
 import {
   useUserProvider,
 } from './hooks';
@@ -44,10 +50,10 @@ const web3Modal = new Web3Modal({
   cacheProvider: true, // optional
   theme: 'dark', // optional. Change to "dark" for a dark theme.
   providerOptions: {
-    walletconnect: {
-      package: WalletConnectProvider, // required
+    portis: {
+      package: Portis, // required
       options: {
-        infuraId: INFURA_ID,
+        id: PORTIS_ID, // required
       },
     },
   },
@@ -118,7 +124,7 @@ function App() {
               <b>{networkLocal && networkLocal.name}</b>
               .
             </div>
-            )}
+          )}
           type="error"
           closable={false}
         />
@@ -127,7 +133,7 @@ function App() {
   } else {
     networkDisplay = (
       <div style={{
-        zIndex: 2, position: 'absolute', right: 154, top: 28, padding: 16, color: targetNetwork.color,
+        zIndex: 2, position: 'absolute', right: 154, top: 18, padding: 16, color: targetNetwork.color,
       }}
       >
         {targetNetwork.name}
@@ -172,8 +178,27 @@ function App() {
 
   return (
     <div className="App">
-      {networkDisplay}
-      <Header web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} logoutOfWeb3Modal={logoutOfWeb3Modal} />
+      <BrowserRouter>
+        {networkDisplay}
+        <Header web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} logoutOfWeb3Modal={logoutOfWeb3Modal} />
+        <Switch>
+          <Route exact path="/">
+            <Profile />
+          </Route>
+          <Route exact path="/create">
+            <Create />
+          </Route>
+          <Route
+            path="/users"
+            render={(props) => (
+              <div>
+                Hello
+                {props.location.search}
+              </div>
+            )}
+          />
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 }
